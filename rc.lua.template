@@ -57,7 +57,8 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
+-- run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
+run_once({"fcitx-autostart"})
 
 -- This function implements the XDG autostart specification
 --[[
@@ -89,21 +90,31 @@ local themes = {
 local chosen_theme = themes[5]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "urxvtc"
-local editor       = os.getenv("EDITOR") or "vim"
-local gui_editor   = "gvim"
-local browser      = "firefox"
-local guieditor    = "atom"
+local terminal     = "xterm -u8"
+local chat         = "google-chrome-stable --app=https://chat.google.com"
+local file_manager = "nemo"
+local editor       = "emacs -nw"
+local browser      = "google-chrome-stable"
+local guieditor    = "emacs"
 local scrlocker    = "slock"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
+awful.util.tagnames = { "一", "二", "三", "四", "五", "六", "七", "八", "九" }
 awful.layout.layouts = {
-    awful.layout.suit.floating,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
+    lain.layout.termfair,
+    awful.layout.suit.tile.right,
+    awful.layout.suit.tile.right,
+    lain.layout.termfair,
+    lain.layout.termfair,
+    lain.layout.termfair,
+    lain.layout.termfair,
+    lain.layout.termfair,
+    lain.layout.termfair,
+    --awful.layout.suit.floating,
+    --awful.layout.suit.tile,
+    --awful.layout.suit.tile.left,
+    --awful.layout.suit.tile.bottom,
+    --awful.layout.suit.tile.top,
     --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
     --awful.layout.suit.spiral,
@@ -255,8 +266,8 @@ root.buttons(my_table.join(
 globalkeys = my_table.join(
     -- Take a screenshot
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() os.execute("screenshot") end,
-              {description = "take a screenshot", group = "hotkeys"}),
+    -- awful.key({ altkey }, "p", function() os.execute("screenshot") end,
+    --           {description = "take a screenshot", group = "hotkeys"}),
 
     -- X screen locker
     awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
@@ -415,8 +426,8 @@ globalkeys = my_table.join(
               {description = "show calendar", group = "widgets"}),
     awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
-    awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
-              {description = "show weather", group = "widgets"}),
+    -- awful.key({ altkey, "Shift" }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
+    --           {description = "show weather", group = "widgets"}),
 
     -- Brightness
     awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
@@ -507,6 +518,11 @@ globalkeys = my_table.join(
               {description = "run browser", group = "launcher"}),
     awful.key({ modkey }, "a", function () awful.spawn(guieditor) end,
               {description = "run gui editor", group = "launcher"}),
+    awful.key({ modkey }, "d", function () awful.spawn(chat) end,
+              {description = "run chat", group = "launcher"}),
+    awful.key({ modkey, "Shift" }, "m", function () awful.spawn(file_manager) end,
+              {description = "run file manager", group = "launcher"}),
+
 
     -- Default
     --[[ Menubar
@@ -557,7 +573,7 @@ clientkeys = my_table.join(
         {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
+    awful.key({ modkey, "Control" }, "f",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
@@ -678,11 +694,16 @@ awful.rules.rules = {
       properties = { titlebars_enabled = true } },
 
     -- Set Firefox to always map on the first tag on screen 1.
-    { rule = { class = "Firefox" },
-      properties = { screen = 1, tag = awful.util.tagnames[1] } },
+    { rule = { class = "Google-chrome" },
+      properties = { screen = 1, tag = awful.util.tagnames[2] } },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
+
+    { rule = { class = "XTerm" },
+      properties = { opacity = 0.8,
+                     -- tag = awful.util.tagnames[1],
+                     titlebars_enabled = true } },
 }
 -- }}}
 
