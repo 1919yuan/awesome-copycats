@@ -58,7 +58,7 @@ local function run_once(cmd_arr)
 end
 
 -- run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
-run_once({"fcitx-autostart"})
+run_once({"~/usr/bin/init.sh"})
 
 -- This function implements the XDG autostart specification
 --[[
@@ -96,9 +96,12 @@ local cycle_prev   = true -- cycle trough all previous client or just the first
 local chat         = "google-chrome-stable --app=https://chat.google.com"
 local file_manager = "nemo"
 local editor       = "emacs -nw"
-local browser      = "google-chrome-stable"
+local browser      = "~/usr/bin/browser.sh"
 local guieditor    = "emacs"
 local scrlocker    = "slock"
+local poweroff     = "~/usr/bin/poweroff.sh"
+local reboot       = "~/usr/bin/reboot.sh"
+local zzz          = "~/usr/bin/zzz.sh"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "一", "二", "三", "四", "五", "六", "七", "八", "九" }
@@ -404,7 +407,7 @@ globalkeys = my_table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
+    awful.key({ modkey, "Shift" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
@@ -542,7 +545,12 @@ globalkeys = my_table.join(
               {description = "run chat", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "m", function () awful.spawn(file_manager) end,
               {description = "run file manager", group = "launcher"}),
-
+    awful.key({ modkey, "Control" }, "u", function awful.spawn(powoff) end,
+              {description = "shutdown machine", group = "launcher"}),
+    awful.key({ modkey, "Control" }, "r", function awful.spawn(reboot) end,
+              {description = "restart machine", group = "launcher"}),
+    awful.key({ modkey, "Control" }, "s", function awful.spawn(zzz) end,
+              {description = "suspend machine", group = "launcher"}),
 
     -- Default
     --[[ Menubar
@@ -714,6 +722,8 @@ awful.rules.rules = {
       properties = { titlebars_enabled = true } },
 
     -- Set Firefox to always map on the first tag on screen 1.
+    { rule = { class = "Firefox" },
+      properties = { screen = 1, tag = awful.util.tagnames[2] } },
     { rule = { class = "Google-chrome" },
       properties = { screen = 1, tag = awful.util.tagnames[2] } },
 
