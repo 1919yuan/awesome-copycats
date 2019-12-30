@@ -545,7 +545,7 @@ globalkeys = my_table.join(
               {description = "run chat", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "m", function () awful.spawn(file_manager) end,
               {description = "run file manager", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "u", function () awful.spawn(powoff) end,
+    awful.key({ modkey, "Control" }, "u", function () awful.spawn(poweroff) end,
               {description = "shutdown machine", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", function () awful.spawn(reboot) end,
               {description = "restart machine", group = "launcher"}),
